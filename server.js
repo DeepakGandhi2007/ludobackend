@@ -57,33 +57,18 @@ app.post('/send-otp', async (req, res) => {
 });
 
 // Route to verify OTP
-app.post('/verify-otp', async (req, res) => {
+app.post('/verify-otp', (req, res) => {
   const { phone, otp } = req.body;
 
-  console.log(otp);
-
-  if (!otpStore[phone]) {
-    return res.status(400).send({ message: 'OTP expired or not requested' });
+  if (!phone || !otp) {
+    return res.status(400).send({ message: 'Phone and OTP are required' });
   }
 
-  if (otpStore[phone] === parseInt(otp)) {
-    // OTP is correct, delete OTP from store
-    delete otpStore[phone];
-      // Send success response with user details
-      res.send({
-        success: true,
-        message: 'OTP verified successfully',
-        user: {
-          uid: userRecord.uid,
-          phone: userRecord.phoneNumber,
-        },
-      });
-    } catch (error) {
-      console.error('Error with Firebase Authentication:', error);
-      res.status(500).send({ message: 'Failed to authenticate user' });
-    }
+  if (otpStore[phone] && otpStore[phone] === parseInt(otp)) {
+    delete otpStore[phone]; // OTP used, remove it
+    res.send({ success: true, message: 'OTP verified successfully' });
   } else {
-    res.status(400).send({ message: 'Invalid OTP' });
+    res.status(400).send({ message: 'Invalid or expired OTP' });
   }
 });
 
