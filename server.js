@@ -69,20 +69,6 @@ app.post('/verify-otp', async (req, res) => {
   if (otpStore[phone] === parseInt(otp)) {
     // OTP is correct, delete OTP from store
     delete otpStore[phone];
-
-    try {
-      // Check if the user exists in Firebase Auth
-      let userRecord;
-      try {
-        // Try to get user by phone number from Firebase
-        userRecord = await admin.auth().getUserByPhoneNumber(phone);
-      } catch (error) {
-        // If user doesn't exist, create a new user in Firebase
-        userRecord = await admin.auth().createUser({
-          phoneNumber: phone,
-        });
-      }
-
       // Send success response with user details
       res.send({
         success: true,
