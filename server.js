@@ -17,7 +17,7 @@ admin.initializeApp({
 // Twilio Client Setup
 
 const accountSid = 'AC000e32d8a2f02c0098aeddac0bb0ae1c';
-const authToken = '90e6f9f26ac626eb1550a14045dd23a6';
+const authToken = '0b5504c74abbc76ec2882bd1142518fd';
 const client = require('twilio')(accountSid, authToken);
 // Temporary in-memory OTP store
 let otpStore = {}; 
